@@ -2,6 +2,7 @@
 
 namespace Omnipay\PayPal;
 
+use Omnipay\PayPal\Message\RestListWebhooksRequest;
 use Omnipay\Tests\GatewayTestCase;
 use Omnipay\Common\CreditCard;
 
@@ -277,7 +278,7 @@ class RestGatewayTest extends GatewayTestCase
         $this->assertSame('abc123', $request->getTransactionReference());
         $endPoint = $request->getEndpoint();
         $this->assertSame('https://api.paypal.com/v1/payments/capture/abc123/refund', $endPoint);
-        
+
         $request->setAmount('15.99');
         $request->setCurrency('BRL');
         $request->setDescription('Test Description');
@@ -297,6 +298,17 @@ class RestGatewayTest extends GatewayTestCase
         $this->assertSame('abc123', $request->getTransactionReference());
         $endPoint = $request->getEndpoint();
         $this->assertSame('https://api.paypal.com/v1/payments/authorization/abc123/void', $endPoint);
+        $data = $request->getData();
+        $this->assertEmpty($data);
+    }
+
+    public function testListWebhooks()
+    {
+        $request = $this->gateway->listWebhooks([]);
+
+        $this->assertInstanceOf(RestListWebhooksRequest::class, $request);
+        $endPoint = $request->getEndpoint();
+        $this->assertSame('https://api.paypal.com/v1/notifications/webhooks', $endPoint);
         $data = $request->getData();
         $this->assertEmpty($data);
     }
