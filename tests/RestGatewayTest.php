@@ -2,9 +2,10 @@
 
 namespace Omnipay\PayPal;
 
+use Omnipay\Common\CreditCard;
+use Omnipay\PayPal\Message\RestCreateWebhookRequest;
 use Omnipay\PayPal\Message\RestListWebhooksRequest;
 use Omnipay\Tests\GatewayTestCase;
-use Omnipay\Common\CreditCard;
 
 class RestGatewayTest extends GatewayTestCase
 {
@@ -217,6 +218,17 @@ class RestGatewayTest extends GatewayTestCase
         $this->assertTrue($response->isSuccessful());
         $this->assertEquals('CARD-70E78145XN686604FKO3L6OQ', $response->getCardReference());
         $this->assertNull($response->getMessage());
+    }
+
+    public function testCreateWebhook()
+    {
+        $request = $this->gateway->createWebhook([]);
+
+        $this->assertInstanceOf(RestCreateWebhookRequest::class, $request);
+        $endPoint = $request->getEndpoint();
+        $this->assertSame('https://api.paypal.com/v1/notifications/webhooks', $endPoint);
+        $data = $request->getData();
+        $this->assertEquals(['event_types' => [], 'url' => null], $data);
     }
 
     public function testPayWithSavedCard()
