@@ -9,6 +9,7 @@ use Omnipay\Common\AbstractGateway;
 use Omnipay\PayPal\Message\ProAuthorizeRequest;
 use Omnipay\PayPal\Message\CaptureRequest;
 use Omnipay\PayPal\Message\RefundRequest;
+use Omnipay\PayPal\Message\RestCreateWebhookRequest;
 use Omnipay\PayPal\Message\RestListWebhooksRequest;
 
 /**
@@ -415,6 +416,16 @@ class RestGateway extends AbstractGateway
     public function completePurchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\PayPal\Message\RestCompletePurchaseRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return RestCreateWebhookRequest
+     */
+    public function createWebhook(array $parameters = [])
+    {
+        return $this->createRequest(RestCreateWebhookRequest::class, $parameters);
     }
 
     // TODO: Update a payment resource https://developer.paypal.com/docs/api/#update-a-payment-resource

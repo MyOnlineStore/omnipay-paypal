@@ -2,9 +2,10 @@
 
 namespace Omnipay\PayPal;
 
+use Omnipay\Common\CreditCard;
+use Omnipay\PayPal\Message\RestCreateWebhookRequest;
 use Omnipay\PayPal\Message\RestListWebhooksRequest;
 use Omnipay\Tests\GatewayTestCase;
-use Omnipay\Common\CreditCard;
 
 class RestGatewayTest extends GatewayTestCase
 {
@@ -27,19 +28,21 @@ class RestGatewayTest extends GatewayTestCase
 
         $this->options = array(
             'amount' => '10.00',
-            'card' => new CreditCard(array(
-                'firstName' => 'Example',
-                'lastName' => 'User',
-                'number' => '4111111111111111',
-                'expiryMonth' => '12',
-                'expiryYear' => date('Y'),
-                'cvv' => '123',
-            )),
+            'card' => new CreditCard(
+                array(
+                    'firstName' => 'Example',
+                    'lastName' => 'User',
+                    'number' => '4111111111111111',
+                    'expiryMonth' => '12',
+                    'expiryYear' => date('Y'),
+                    'cvv' => '123',
+                )
+            ),
         );
 
         $this->subscription_options = array(
-            'transactionReference'  => 'ABC-1234',
-            'description'           => 'Description goes here',
+            'transactionReference' => 'ABC-1234',
+            'description' => 'Description goes here',
         );
     }
 
@@ -49,7 +52,10 @@ class RestGatewayTest extends GatewayTestCase
         $this->setMockHttpResponse('RestTokenSuccess.txt');
 
         $this->assertFalse($this->gateway->hasToken());
-        $this->assertEquals('A015GQlKQ6uCRzLHSGRliANi59BHw6egNVKEWRnxvTwvLr0', $this->gateway->getToken()); // triggers request
+        $this->assertEquals(
+            'A015GQlKQ6uCRzLHSGRliANi59BHw6egNVKEWRnxvTwvLr0',
+            $this->gateway->getToken()
+        ); // triggers request
         $this->assertEquals(time() + 28800, $this->gateway->getTokenExpires());
         $this->assertTrue($this->gateway->hasToken());
     }
@@ -98,11 +104,13 @@ class RestGatewayTest extends GatewayTestCase
 
     public function testCapture()
     {
-        $request = $this->gateway->capture(array(
-            'transactionReference' => 'abc123',
-            'amount' => 10.00,
-            'currency' => 'AUD',
-        ));
+        $request = $this->gateway->capture(
+            array(
+                'transactionReference' => 'abc123',
+                'amount' => 10.00,
+                'currency' => 'AUD',
+            )
+        );
 
         $this->assertInstanceOf('\Omnipay\PayPal\Message\RestCaptureRequest', $request);
         $this->assertSame('abc123', $request->getTransactionReference());
@@ -114,11 +122,13 @@ class RestGatewayTest extends GatewayTestCase
 
     public function testRefund()
     {
-        $request = $this->gateway->refund(array(
-            'transactionReference' => 'abc123',
-            'amount' => 10.00,
-            'currency' => 'AUD',
-        ));
+        $request = $this->gateway->refund(
+            array(
+                'transactionReference' => 'abc123',
+                'amount' => 10.00,
+                'currency' => 'AUD',
+            )
+        );
 
         $this->assertInstanceOf('\Omnipay\PayPal\Message\RestRefundRequest', $request);
         $this->assertSame('abc123', $request->getTransactionReference());
@@ -130,9 +140,11 @@ class RestGatewayTest extends GatewayTestCase
 
     public function testFullRefund()
     {
-        $request = $this->gateway->refund(array(
-            'transactionReference' => 'abc123',
-        ));
+        $request = $this->gateway->refund(
+            array(
+                'transactionReference' => 'abc123',
+            )
+        );
 
         $this->assertInstanceOf('\Omnipay\PayPal\Message\RestRefundRequest', $request);
         $this->assertSame('abc123', $request->getTransactionReference());
@@ -157,12 +169,14 @@ class RestGatewayTest extends GatewayTestCase
 
     public function testListPlan()
     {
-        $request = $this->gateway->listPlan(array(
-            'page'         => 0,
-            'status'       => 'ACTIVE',
-            'pageSize'    => 10, //number of plans in a single page
-            'totalRequired'     => 'yes'
-        ));
+        $request = $this->gateway->listPlan(
+            array(
+                'page' => 0,
+                'status' => 'ACTIVE',
+                'pageSize' => 10, //number of plans in a single page
+                'totalRequired' => 'yes',
+            )
+        );
 
         $this->assertInstanceOf('\Omnipay\PayPal\Message\RestListPlanRequest', $request);
         $this->assertSame(0, $request->getPage());
@@ -188,13 +202,15 @@ class RestGatewayTest extends GatewayTestCase
 
     public function testListPurchase()
     {
-        $request = $this->gateway->listPurchase(array(
-            'count'         => 15,
-            'startId'       => 'PAY123',
-            'startIndex'    => 1,
-            'startTime'     => '2015-09-07T00:00:00Z',
-            'endTime'       => '2015-09-08T00:00:00Z',
-        ));
+        $request = $this->gateway->listPurchase(
+            array(
+                'count' => 15,
+                'startId' => 'PAY123',
+                'startIndex' => 1,
+                'startTime' => '2015-09-07T00:00:00Z',
+                'endTime' => '2015-09-08T00:00:00Z',
+            )
+        );
 
         $this->assertInstanceOf('\Omnipay\PayPal\Message\RestListPurchaseRequest', $request);
         $this->assertSame(15, $request->getCount());
@@ -219,6 +235,17 @@ class RestGatewayTest extends GatewayTestCase
         $this->assertNull($response->getMessage());
     }
 
+    public function testCreateWebhook()
+    {
+        $request = $this->gateway->createWebhook([]);
+
+        $this->assertInstanceOf(RestCreateWebhookRequest::class, $request);
+        $endPoint = $request->getEndpoint();
+        $this->assertSame('https://api.paypal.com/v1/notifications/webhooks', $endPoint);
+        $data = $request->getData();
+        $this->assertEquals(['event_types' => [], 'url' => null], $data);
+    }
+
     public function testPayWithSavedCard()
     {
         $this->setMockHttpResponse('RestCreateCardSuccess.txt');
@@ -226,7 +253,7 @@ class RestGatewayTest extends GatewayTestCase
         $cardRef = $response->getCardReference();
 
         $this->setMockHttpResponse('RestPurchaseSuccess.txt');
-        $response = $this->gateway->purchase(array('amount'=>'10.00', 'cardReference'=>$cardRef))->send();
+        $response = $this->gateway->purchase(array('amount' => '10.00', 'cardReference' => $cardRef))->send();
         $this->assertTrue($response->isSuccessful());
         $this->assertEquals('44E89981F8714392Y', $response->getTransactionReference());
         $this->assertNull($response->getMessage());
@@ -270,9 +297,11 @@ class RestGatewayTest extends GatewayTestCase
 
     public function testRefundCapture()
     {
-        $request = $this->gateway->refundCapture(array(
-            'transactionReference' => 'abc123'
-        ));
+        $request = $this->gateway->refundCapture(
+            array(
+                'transactionReference' => 'abc123',
+            )
+        );
 
         $this->assertInstanceOf('\Omnipay\PayPal\Message\RestRefundCaptureRequest', $request);
         $this->assertSame('abc123', $request->getTransactionReference());
@@ -290,9 +319,11 @@ class RestGatewayTest extends GatewayTestCase
 
     public function testVoid()
     {
-        $request = $this->gateway->void(array(
-            'transactionReference' => 'abc123'
-        ));
+        $request = $this->gateway->void(
+            array(
+                'transactionReference' => 'abc123',
+            )
+        );
 
         $this->assertInstanceOf('\Omnipay\PayPal\Message\RestVoidRequest', $request);
         $this->assertSame('abc123', $request->getTransactionReference());
