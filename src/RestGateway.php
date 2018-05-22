@@ -9,6 +9,7 @@ use Omnipay\Common\AbstractGateway;
 use Omnipay\PayPal\Message\ProAuthorizeRequest;
 use Omnipay\PayPal\Message\CaptureRequest;
 use Omnipay\PayPal\Message\RefundRequest;
+use Omnipay\PayPal\Message\RestListWebhooksRequest;
 
 /**
  * PayPal Pro Class using REST API
@@ -708,6 +709,16 @@ class RestGateway extends AbstractGateway
     public function searchTransaction(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\PayPal\Message\RestSearchTransactionRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return RestListWebhooksRequest
+     */
+    public function listWebhooks(array $parameters = [])
+    {
+        return $this->createRequest(RestListWebhooksRequest::class, $parameters);
     }
 
     // TODO: Update an agreement
