@@ -5,6 +5,7 @@ namespace Omnipay\PayPal;
 use Omnipay\Common\CreditCard;
 use Omnipay\PayPal\Message\RestCreateWebhookRequest;
 use Omnipay\PayPal\Message\RestListWebhooksRequest;
+use Omnipay\PayPal\Message\RestVerifyWebhookSignatureRequest;
 use Omnipay\Tests\GatewayTestCase;
 
 class RestGatewayTest extends GatewayTestCase
@@ -225,10 +226,8 @@ class RestGatewayTest extends GatewayTestCase
         $request = $this->gateway->createWebhook([]);
 
         $this->assertInstanceOf(RestCreateWebhookRequest::class, $request);
-        $endPoint = $request->getEndpoint();
-        $this->assertSame('https://api.paypal.com/v1/notifications/webhooks', $endPoint);
-        $data = $request->getData();
-        $this->assertEquals(['event_types' => [], 'url' => null], $data);
+        $this->assertSame('https://api.paypal.com/v1/notifications/webhooks', $request->getEndpoint());
+        $this->assertEquals(['event_types' => [], 'url' => null], $request->getData());
     }
 
     public function testPayWithSavedCard()
@@ -319,9 +318,27 @@ class RestGatewayTest extends GatewayTestCase
         $request = $this->gateway->listWebhooks([]);
 
         $this->assertInstanceOf(RestListWebhooksRequest::class, $request);
-        $endPoint = $request->getEndpoint();
-        $this->assertSame('https://api.paypal.com/v1/notifications/webhooks', $endPoint);
-        $data = $request->getData();
-        $this->assertEmpty($data);
+        $this->assertSame('https://api.paypal.com/v1/notifications/webhooks', $request->getEndpoint());
+        $this->assertEmpty($request->getData());
+    }
+
+    public function testVerifyWebhook()
+    {
+        $request = $this->gateway->verifyWebhookSignature([]);
+
+        $this->assertInstanceOf(RestVerifyWebhookSignatureRequest::class, $request);
+        $this->assertSame('https://api.paypal.com/v1/notifications/verify-webhook-signature', $request->getEndpoint());
+        $this->assertEquals(
+            [
+                'transmission_id' => null,
+                'auth_algo' => null,
+                'cert_url' => null,
+                'transmission_sig' => null,
+                'transmission_time' => null,
+                'webhook_event' => null,
+                'webhook_id' => null,
+            ],
+            $request->getData()
+        );
     }
 }
