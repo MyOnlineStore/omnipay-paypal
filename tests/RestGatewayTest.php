@@ -34,7 +34,7 @@ class RestGatewayTest extends GatewayTestCase
                 'lastName' => 'User',
                 'number' => '4111111111111111',
                 'expiryMonth' => '12',
-                'expiryYear' => '2017',
+                'expiryYear' => '2019',
                 'cvv' => '123',
             )),
         );
