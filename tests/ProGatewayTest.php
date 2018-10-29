@@ -20,7 +20,7 @@ class ProGatewayTest extends GatewayTestCase
                 'lastName' => 'User',
                 'number' => '4111111111111111',
                 'expiryMonth' => '12',
-                'expiryYear' => '2019',
+                'expiryYear' => (new \Datetime())->modify('+1 year')->format('Y'),
                 'cvv' => '123',
             )),
         );
