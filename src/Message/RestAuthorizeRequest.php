@@ -232,7 +232,8 @@ class RestAuthorizeRequest extends AbstractRestRequest
                     ),
                 )
             ),
-            'experience_profile_id' => $this->getExperienceProfileId()
+            'experience_profile_id' => $this->getExperienceProfileId(),
+            'application_context' => ['shipping_preference' => parent::getShippingPreference()],
         );
 
         $items = $this->getItems();

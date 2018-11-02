@@ -29,7 +29,6 @@ class RestCompletePurchaseRequestTest extends TestCase
     {
         $this->request->setTransactionReference('abc123');
         $this->request->setPayerId('Payer12345');
-
         $data = $this->request->getData();
 
         $this->assertSame('Payer12345', $data['payer_id']);
