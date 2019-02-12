@@ -126,4 +126,11 @@ class RestAuthorizeRequestTest extends TestCase
         $this->request->setDescription('Sheep');
         $this->assertEquals('abc123 : Sheep', $this->request->getDescription());
     }
+
+    public function testSetShippingPreference()
+    {
+        self::assertNull($this->request->getShippingPreference());
+        $this->request->setShippingPreference(AbstractRestRequest::SHIPPING_PREFERENCE_NO_SHIPPING);
+        self::assertSame(AbstractRestRequest::SHIPPING_PREFERENCE_NO_SHIPPING, $this->request->getShippingPreference());
+    }
 }
