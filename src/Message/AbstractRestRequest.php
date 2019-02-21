@@ -36,6 +36,11 @@ abstract class AbstractRestRequest extends \Omnipay\Common\Message\AbstractReque
     const SHIPPING_PREFERENCE_SET_PROVIDED_ADDRESS = 'SET_PROVIDED_ADDRESS';
 
     /**
+     * @var bool
+     */
+    protected $negativeAmountAllowed = true;
+
+    /**
      * Sandbox Endpoint URL
      *
      * The PayPal REST APIs are supported in two environments. Use the Sandbox environment
