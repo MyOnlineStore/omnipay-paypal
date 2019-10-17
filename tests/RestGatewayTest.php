@@ -4,6 +4,7 @@ namespace Omnipay\PayPal;
 
 use Omnipay\Common\CreditCard;
 use Omnipay\PayPal\Message\RestCreateWebhookRequest;
+use Omnipay\PayPal\Message\RestFetchAuthorizationRequest;
 use Omnipay\PayPal\Message\RestListWebhooksRequest;
 use Omnipay\PayPal\Message\RestVerifyWebhookSignatureRequest;
 use Omnipay\Tests\GatewayTestCase;
@@ -340,5 +341,10 @@ class RestGatewayTest extends GatewayTestCase
             ],
             $request->getData()
         );
+    }
+
+    public function testFetchAuthorizationRequest()
+    {
+        $this->assertInstanceOf(RestFetchAuthorizationRequest::class, $this->gateway->fetchAuthorization([]));
     }
 }
