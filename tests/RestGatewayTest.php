@@ -179,6 +179,16 @@ class RestGatewayTest extends GatewayTestCase
         $this->assertNotEmpty($data);
     }
 
+    public function testFetchCapture()
+    {
+        $request = $this->gateway->fetchCapture(array('transactionReference' => 'abc123'));
+
+        $this->assertInstanceOf('\Omnipay\PayPal\Message\RestFetchCaptureRequest', $request);
+        $this->assertSame('abc123', $request->getTransactionReference());
+        $data = $request->getData();
+        $this->assertEmpty($data);
+    }
+
     public function testFetchPurchase()
     {
         $request = $this->gateway->fetchPurchase(array('transactionReference' => 'abc123'));
