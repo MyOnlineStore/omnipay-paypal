@@ -49,6 +49,6 @@ class RestFetchCaptureRequest extends AbstractRestRequest
 
     public function getEndpoint()
     {
-        return parent::getEndpoint() . '/payments/captures/' . $this->getTransactionReference();
+        return parent::getEndpoint() . '/payments/capture/' . $this->getTransactionReference();
     }
 }

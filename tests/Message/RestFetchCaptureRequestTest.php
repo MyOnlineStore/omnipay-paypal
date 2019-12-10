@@ -19,6 +19,6 @@ class RestFetchCaptureRequestTest extends TestCase
     public function testEndpoint()
     {
         $this->request->setTransactionReference('ABC-123');
-        $this->assertStringEndsWith('/payments/captures/ABC-123', $this->request->getEndpoint());
+        $this->assertStringEndsWith('/payments/capture/ABC-123', $this->request->getEndpoint());
     }
 }

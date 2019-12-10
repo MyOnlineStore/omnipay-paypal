@@ -495,7 +495,7 @@ class RestGateway extends AbstractGateway
     {
         return $this->createRequest('\Omnipay\PayPal\Message\RestVoidRequest', $parameters);
     }
-
+f
     /**
      * Capture an authorization.
      *
