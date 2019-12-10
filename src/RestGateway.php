@@ -384,7 +384,7 @@ class RestGateway extends AbstractGateway
      *
      * @link https://developer.paypal.com/docs/api/#look-up-a-payment-resource
      * @param array $parameters
-     * @return \Omnipay\PayPal\Message\RestFetchPurchaseRequest
+     * @return \Omnipay\PayPal\Message\RestFetchCaptureRequest
      */
     public function fetchCapture(array $parameters = array())
     {
@@ -495,7 +495,7 @@ class RestGateway extends AbstractGateway
     {
         return $this->createRequest('\Omnipay\PayPal\Message\RestVoidRequest', $parameters);
     }
-f
+
     /**
      * Capture an authorization.
      *
