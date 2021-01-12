@@ -62,6 +62,29 @@ abstract class AbstractRestRequest extends \Omnipay\Common\Message\AbstractReque
      */
     protected $payerId = null;
 
+    protected $referrerCode;
+
+    /**
+     * @var bool
+     */
+    protected $negativeAmountAllowed = true;
+    
+    /**
+     * @return string
+     */
+    public function getReferrerCode()
+    {
+        return $this->referrerCode;
+    }
+
+    /**
+     * @param string $referrerCode
+     */
+    public function setReferrerCode($referrerCode)
+    {
+        $this->referrerCode = $referrerCode;
+    }
+
     public function getClientId()
     {
         return $this->getParameter('clientId');
@@ -146,6 +169,7 @@ abstract class AbstractRestRequest extends \Omnipay\Common\Message\AbstractReque
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . $this->getToken(),
                     'Content-type' => 'application/json',
+                    'PayPal-Partner-Attribution-Id' => $this->getReferrerCode(),
                 ),
                 $body
             );
