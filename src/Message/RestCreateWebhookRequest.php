@@ -2,16 +2,22 @@
 
 namespace Omnipay\PayPal\Message;
 
+use Omnipay\Common\Exception\InvalidRequestException;
+
 final class RestCreateWebhookRequest extends AbstractRestRequest
 {
     /**
      * @inheritDoc
+     *
+     * @throws InvalidRequestException
      */
-    public function getData()
+    public function getData(): array
     {
+        $this->validate('event_types', 'webhook_url');
+
         return [
             'event_types' => \array_map(
-                function ($value) {
+                static function (string $value): array {
                     return ['name' => $value];
                 },
                 $this->getEventTypes()
@@ -20,47 +26,39 @@ final class RestCreateWebhookRequest extends AbstractRestRequest
         ];
     }
 
+    public function getEndpoint(): string
+    {
+        return parent::getEndpoint() . '/notifications/webhooks';
+    }
+
     /**
-     * @return array
+     * @return list<string>
      */
-    public function getEventTypes()
+    public function getEventTypes(): array
     {
         return $this->getParameter('event_types') ?: [];
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getEndpoint()
-    {
-        return parent::getEndpoint().'/notifications/webhooks';
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->getParameter('webhook_url');
     }
 
     /**
-     * @param array $eventTypes
-     *
-     * @return $this
+     * @param list<string> $eventTypes
      */
-    public function setEventTypes(array $eventTypes)
+    public function setEventTypes(array $eventTypes): self
     {
         return $this->setParameter('event_types', $eventTypes);
     }
 
-    /**
-     * @param string $url
-     *
-     * @return $this
-     */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         return $this->setParameter('webhook_url', $url);
+    }
+
+    protected function createResponse($data, $statusCode): RestCreateWebhookResponse
+    {
+        return $this->response = new RestCreateWebhookResponse($this, $data, $statusCode);
     }
 }

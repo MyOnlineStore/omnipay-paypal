@@ -232,13 +232,24 @@ class RestGatewayTest extends GatewayTestCase
         $this->assertNull($response->getMessage());
     }
 
-    public function testCreateWebhook()
+    public function testCreateWebhook(): void
     {
-        $request = $this->gateway->createWebhook([]);
+        $request = $this->gateway->createWebhook(
+            [
+                'event_types' => ['PAYMENT.SALE.REFUNDED'],
+                'url' => 'https://foo.bar/'
+            ]
+        );
 
-        $this->assertInstanceOf(RestCreateWebhookRequest::class, $request);
-        $this->assertSame('https://api.paypal.com/v1/notifications/webhooks', $request->getEndpoint());
-        $this->assertEquals(['event_types' => [], 'url' => null], $request->getData());
+        self::assertInstanceOf(RestCreateWebhookRequest::class, $request);
+        self::assertSame('https://api.paypal.com/v1/notifications/webhooks', $request->getEndpoint());
+        self::assertEquals(
+            [
+                'event_types' => [['name' => 'PAYMENT.SALE.REFUNDED']],
+                'url' => 'https://foo.bar/'
+            ],
+            $request->getData()
+        );
     }
 
     public function testPayWithSavedCard()

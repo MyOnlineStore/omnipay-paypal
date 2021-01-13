@@ -10,7 +10,9 @@ use Omnipay\PayPal\Message\ProAuthorizeRequest;
 use Omnipay\PayPal\Message\CaptureRequest;
 use Omnipay\PayPal\Message\RefundRequest;
 use Omnipay\PayPal\Message\RestCreateWebhookRequest;
+use Omnipay\PayPal\Message\RestDeleteWebhookRequest;
 use Omnipay\PayPal\Message\RestListWebhooksRequest;
+use Omnipay\PayPal\Message\RestUpdateWebhookRequest;
 use Omnipay\PayPal\Message\RestVerifyWebhookSignatureRequest;
 
 /**
@@ -341,6 +343,10 @@ class RestGateway extends AbstractGateway
      * @param string $class
      * @param array $parameters
      * @return \Omnipay\PayPal\Message\AbstractRestRequest
+     *
+     * @psalm-template T of \Omnipay\PayPal\Message\AbstractRestRequest
+     * @psalm-param class-string<T> $class
+     * @psalm-return T
      */
     public function createRequest($class, array $parameters = array())
     {
@@ -432,16 +438,6 @@ class RestGateway extends AbstractGateway
     public function completePurchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\PayPal\Message\RestCompletePurchaseRequest', $parameters);
-    }
-
-    /**
-     * @param array $parameters
-     *
-     * @return RestCreateWebhookRequest
-     */
-    public function createWebhook(array $parameters = [])
-    {
-        return $this->createRequest(RestCreateWebhookRequest::class, $parameters);
     }
 
     // TODO: Update a payment resource https://developer.paypal.com/docs/api/#update-a-payment-resource
@@ -752,21 +748,41 @@ class RestGateway extends AbstractGateway
     }
 
     /**
-     * @param array $parameters
-     *
-     * @return RestListWebhooksRequest
+     * @param mixed[] $parameters
      */
-    public function listWebhooks(array $parameters = [])
+    public function createWebhook(array $parameters = []): RestCreateWebhookRequest
+    {
+        return $this->createRequest(RestCreateWebhookRequest::class, $parameters);
+    }
+
+    /**
+     * @param mixed[] $parameters
+     */
+    public function deleteWebhook(array $parameters = []): RestDeleteWebhookRequest
+    {
+        return $this->createRequest(RestDeleteWebhookRequest::class, $parameters);
+    }
+
+    /**
+     * @param mixed[] $parameters
+     */
+    public function listWebhooks(array $parameters = []): RestListWebhooksRequest
     {
         return $this->createRequest(RestListWebhooksRequest::class, $parameters);
     }
 
     /**
-     * @param array $parameters
-     *
-     * @return RestVerifyWebhookSignatureRequest
+     * @param mixed[] $parameters
      */
-    public function verifyWebhookSignature(array $parameters = [])
+    public function updateWebhook(array $parameters = []): RestUpdateWebhookRequest
+    {
+        return $this->createRequest(RestUpdateWebhookRequest::class, $parameters);
+    }
+
+    /**
+     * @param mixed[] $parameters
+     */
+    public function verifyWebhookSignature(array $parameters = []): RestVerifyWebhookSignatureRequest
     {
         return $this->createRequest(RestVerifyWebhookSignatureRequest::class, $parameters);
     }

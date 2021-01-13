@@ -1,0 +1,42 @@
+HTTP/1.1 201 Created
+Server: Apache-Coyote/1.1
+PROXY_SERVER_INFO: host=slcsbjava2.slc.paypal.com;threadId=76018
+Paypal-Debug-Id: 965491cb1a1e5
+SERVER_INFO: paymentsplatformserv:v1.payments.sale&CalThreadId=129&TopLevelTxnStartTime=14701c36ef9&Host=slcsbjm3.slc.paypal.com&pid=15797
+CORRELATION-ID: 965491cb1a1e5
+Content-Language: *
+Date: Fri, 04 Jul 2014 14:24:52 GMT
+Content-Type: application/json
+Content-Length: 592
+
+{
+  "id": "0EH40505U7160970P",
+  "url": "https://example.com/example_webhook",
+  "event_types": [
+    {
+      "name": "PAYMENT.AUTHORIZATION.CREATED",
+      "description": "A payment authorization was created."
+    },
+    {
+      "name": "PAYMENT.AUTHORIZATION.VOIDED",
+      "description": "A payment authorization was voided."
+    }
+  ],
+  "links": [
+    {
+      "href": "https://api.paypal.com/v1/notifications/webhooks/0EH40505U7160970P",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "https://api.paypal.com/v1/notifications/webhooks/0EH40505U7160970P",
+      "rel": "update",
+      "method": "PATCH"
+    },
+    {
+      "href": "https://api.paypal.com/v1/notifications/webhooks/0EH40505U7160970P",
+      "rel": "delete",
+      "method": "DELETE"
+    }
+  ]
+}

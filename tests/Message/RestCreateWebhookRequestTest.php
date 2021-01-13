@@ -11,14 +11,14 @@ final class RestCreateWebhookRequestTest extends TestCase
      */
     private $request;
 
-    public function setUp()
+    public function setUp(): void
     {
         $client = $this->getHttpClient();
         $request = $this->getHttpRequest();
         $this->request = new RestCreateWebhookRequest($client, $request);
     }
 
-    public function testGetData()
+    public function testGetData(): void
     {
         $event1 = 'PAYMENT.AUTHORIZATION.CREATED';
         $event2 = 'PAYMENT.AUTHORIZATION.VOIDED';
@@ -30,7 +30,7 @@ final class RestCreateWebhookRequestTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
+        self::assertEquals(
             [
                 'event_types' => [['name' => $event1], ['name' => $event2]],
                 'url' => $url,
@@ -39,19 +39,19 @@ final class RestCreateWebhookRequestTest extends TestCase
         );
     }
 
-    public function testGetEndpoint()
+    public function testGetEndpoint(): void
     {
-        $this->assertStringEndsWith('/notifications/webhooks', $this->request->getEndpoint());
+        self::assertStringEndsWith('/notifications/webhooks', $this->request->getEndpoint());
     }
 
-    public function testGetEventTypes()
+    public function testGetEventTypes(): void
     {
         $value = ['PAYMENT.AUTHORIZATION.CREATED'];
         $this->request->setEventTypes($value);
         self::assertSame($value, $this->request->getEventTypes());
     }
 
-    public function testGetUrl()
+    public function testGetUrl(): void
     {
         $value = 'https://foo.bar/baz';
         $this->request->setUrl($value);

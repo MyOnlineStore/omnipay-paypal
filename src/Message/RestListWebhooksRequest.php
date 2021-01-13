@@ -5,32 +5,26 @@ namespace Omnipay\PayPal\Message;
 /**
  * PayPal REST List Webhooks request
  *
- * @link https://developer.paypal.com/docs/api/webhooks/#webhooks_get-all
+ * @link https://developer.paypal.com/docs/api/webhooks/v1/#webhooks_list
  */
 final class RestListWebhooksRequest extends AbstractRestRequest
 {
-    /**
-     * @inheritDoc
-     */
-    public function getData()
+    public function getData(): array
     {
         return [];
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getEndpoint()
+    public function getEndpoint(): string
     {
-        return parent::getEndpoint().'/notifications/webhooks';
+        return parent::getEndpoint() . '/notifications/webhooks';
     }
 
-    /**
-     * Get HTTP Method.
-     *
-     * @return string
-     */
-    protected function getHttpMethod()
+    protected function createResponse($data, $statusCode): RestListWebhooksResponse
+    {
+        return $this->response = new RestListWebhooksResponse($this, $data, $statusCode);
+    }
+
+    protected function getHttpMethod(): string
     {
         return 'GET';
     }
