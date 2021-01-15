@@ -11,20 +11,20 @@ final class RestListWebhooksRequestTest extends TestCase
      */
     private $request;
 
-    public function setUp()
+    public function setUp(): void
     {
         $client = $this->getHttpClient();
         $request = $this->getHttpRequest();
         $this->request = new RestListWebhooksRequest($client, $request);
     }
 
-    public function testEndpoint()
+    public function testEndpoint(): void
     {
-        $this->assertStringEndsWith('/notifications/webhooks', $this->request->getEndpoint());
+        self::assertStringEndsWith('/notifications/webhooks', $this->request->getEndpoint());
     }
 
-    public function testGetData()
+    public function testGetData(): void
     {
-        $this->assertEmpty($this->request->getData());
+        self::assertSame([], $this->request->getData());
     }
 }

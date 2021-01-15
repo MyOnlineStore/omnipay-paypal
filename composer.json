@@ -27,12 +27,13 @@
         "psr-4": { "Omnipay\\PayPal\\" : "src/" }
     },
     "require": {
-        "omnipay/common": "^3"
+        "php": "^7.2",
+        "omnipay/common": "^3.0"
     },
     "require-dev": {
-        "omnipay/tests": "^3",
-        "squizlabs/php_codesniffer": "^3",
-        "phpro/grumphp": "^0.14"
+        "omnipay/tests": "^3.1",
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpro/grumphp": "^0.19"
     },
     "extra": {
         "branch-alias": {
